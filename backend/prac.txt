@@ -1,0 +1,153 @@
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Spinner } from 'react-bootstrap';
+import './App.css'; // Import additional styles
+
+function App() {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [ocrResult, setOcrResult] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setOcrResult('');
+    setError('');
+  };
+
+  const handleUpload = () => {
+    if (!selectedFile) {
+      setError('Please select a file first.');
+      return;
+    }
+
+    // Simulating OCR processing delay
+    setLoading(true);
+    setError('');
+    setOcrResult('');
+
+    setTimeout(() => {
+      setOcrResult('This is a placeholder for the OCR result.');
+      setLoading(false);
+    }, 2000);
+  
+
+  return (
+    <div className="container mt-5" style={styles.container}>
+      <div className="card shadow-lg p-4" style={styles.card}>
+        <h1 className="text-center mb-4" style={styles.title}>Prescription Decoder</h1>
+
+        <div className="mb-3">
+          <label htmlFor="fileUpload" className="form-label fw-bold" style={styles.label}>Upload Image</label>
+          <input
+            className="form-control form-control-lg"
+            id="fileUpload"
+            type="file"
+            onChange={handleFileChange}
+            style={styles.fileInput}
+          />
+        </div>
+
+        <div className="d-flex justify-content-center mb-4">
+          <button
+            className="btn btn-success btn-lg px-5 py-2"
+            onClick={handleUpload}
+            disabled={loading}
+            style={styles.button}
+          >
+            {loading ? (
+              <>
+                <Spinner animation="border" size="sm" /> Processing...
+              </>
+            ) : (
+              <>
+                <i className="bi bi-upload"></i> Upload and Process
+              </>
+            )}
+          </button>
+        </div>
+
+        {error && <p className="text-danger text-center fw-bold" style={styles.error}>{error}</p>}
+
+        {ocrResult && (
+          <div className="mt-4 p-3 bg-light border rounded shadow-sm" style={styles.resultBox}>
+            <h3 className="text-center" style={styles.resultTitle}>OCR Result</h3>
+            <pre className="mt-3 p-3 border bg-white" style={styles.resultText}>
+              {ocrResult}
+            </pre>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  container: {
+    backgroundImage: 'url(https://www.transparenttextures.com/patterns/white-diamond.png)', // Subtle background image
+    backgroundColor: '#f0f4f8',
+    padding: '50px',
+    borderRadius: '15px',
+    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.2)',
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: '20px',
+    padding: '30px',
+    border: '1px solid #ddd',
+    boxShadow: '0 6px 15px rgba(0, 0, 0, 0.1)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  },
+  title: {
+    fontSize: '2.5rem',
+    fontWeight: 'bold',
+    color: '#333',
+    background: '-webkit-linear-gradient(#6E93D6, #8FDAC8)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
+  },
+  label: {
+    fontSize: '1.2rem',
+    color: '#444',
+  },
+  fileInput: {
+    padding: '12px',
+    borderRadius: '8px',
+    border: '2px solid #6E93D6',
+    transition: 'border-color 0.3s',
+  },
+  button: {
+    borderRadius: '30px',
+    background: 'linear-gradient(135deg, #6E93D6, #8FDAC8)',
+    border: 'none',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    transition: 'background-color 0.3s, box-shadow 0.3s ease',
+  },
+  error: {
+    fontSize: '1.1rem',
+  },
+  resultBox: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: '10px',
+    padding: '20px',
+    border: '1px solid #ddd',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  },
+  resultTitle: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  resultText: {
+    fontSize: '1rem',
+    color: '#333',
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '10px',
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+  },
+};
+
+export default App;
